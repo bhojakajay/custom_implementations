@@ -7,6 +7,7 @@ public class UserIterator implements IteratorInterface{
 	private UserCollection collection;
 	private int changeTimes;
 	private int cursor;
+	private boolean isIterationStarted;
 	public UserIterator(final UserCollection collection) {
 		this.collection = collection;
 		this.changeTimes = collection.getChangeTimes();
@@ -14,7 +15,11 @@ public class UserIterator implements IteratorInterface{
 	
 	@Override
 	public boolean hasNext() {
-		checkForModifications();
+		if(isIterationStarted) {
+			checkForModifications();	
+		}
+		changeTimes = collection.getChangeTimes();
+		isIterationStarted = true;
 		if(boundryConditionCheck() && cursorLocationCheck() && cursorMaxLimit()) {
 			return true;
 		}
